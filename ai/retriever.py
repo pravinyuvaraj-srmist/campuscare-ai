@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-import math
 
 from .chunker import Chunk
 from .embeddings import embed_query, embed_texts
@@ -27,8 +26,7 @@ class VectorRetriever:
 
     @classmethod
     def build(cls, chunks: list[Chunk], model_name: str):
-        texts = [f"{chunk.title}
-{chunk.text}" for chunk in chunks]
+        texts = [chunk.title + " " + chunk.text for chunk in chunks]
         embeddings = embed_texts(texts, model_name)
         return cls(chunks, embeddings, model_name)
 
@@ -37,8 +35,8 @@ class VectorRetriever:
             return []
 
         query_vector = embed_query(query, self.model_name)
+        scored: list[tuple[float, Chunk]] = []
 
-        scored = []
         for chunk, vector in zip(self.chunks, self.embeddings):
             score = sum(a * b for a, b in zip(vector, query_vector))
             scored.append((score, chunk))
