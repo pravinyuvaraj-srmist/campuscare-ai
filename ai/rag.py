@@ -33,7 +33,7 @@ class RAGPipeline:
         data_file: str | Path = DATA_FILE,
         model_name: str = EMBEDDING_MODEL,
         top_k: int = TOP_K,
-    ):
+    ) -> "RAGPipeline":
         documents = load_documents(data_file)
         chunks = chunk_documents(documents)
         retriever = VectorRetriever.build(chunks, model_name)
@@ -68,10 +68,8 @@ class RAGPipeline:
         except RuntimeError:
             best = retrievals[0].chunk
             answer = (
-                f"{best.text}
-
-"
-                f"Sources: {best.title} — {best.source}"
+                f"{best.text}\n\n"
+                f"Source: {best.title} — {best.source}"
             )
 
         sources = [
