@@ -18,10 +18,14 @@ export default function App() {
   async function askQuestion(event) {
     event?.preventDefault();
     const value = question.trim();
-    if (!value) return;
+
+    if (!value || loading) return;
 
     setLoading(true);
     setError("");
+    setAnswer("");
+    setSources([]);
+
     try {
       const response = await fetch(`${API_URL}/api/chat`, {
         method: "POST",
@@ -29,88 +33,155 @@ export default function App() {
         body: JSON.stringify({ question: value }),
       });
 
+      const data = await response.json().catch(() => ({}));
+
       if (!response.ok) {
-        throw new Error("The backend returned an error.");
+        throw new Error(data.detail || "The CampusCare backend returned an error.");
       }
 
-      const data = await response.json();
-      setAnswer(data.answer);
-      setSources(data.sources || []);
+      setAnswer(data.answer || "No answer was returned.");
+      setSources(Array.isArray(data.sources) ? data.sources : []);
     } catch (err) {
-      setAnswer("");
-      setSources([]);
       setError(
-        "Could not reach the CampusCare backend. Start the FastAPI server and try again."
+        err instanceof Error
+          ? err.message
+          : "Could not reach the CampusCare backend."
       );
     } finally {
       setLoading(false);
     }
   }
 
+  function useSuggestion(value) {
+    setQuestion(value);
+    setError("");
+  }
+
+  function clearConversation() {
+    setQuestion("");
+    setAnswer("");
+    setSources([]);
+    setError("");
+  }
+
   return (
-    <main className="page">
-      <section className="hero">
-        <div>
-          <p className="eyebrow">OPEN INNOVATION • CODE CORTEX</p>
+    <main className="page-shell">
+      <section className="app-card">
+        <header className="hero">
+          <div className="eyebrow">OPEN INNOVATION • CODE CORTEX</div>
           <h1>CampusCare AI</h1>
-          <p className="subtitle">
-            A student-friendly assistant for campus services, support, and
-            emergency guidance.
+          <p>
+            Ask questions about campus services, student support, and emergency
+            guidance. Get a clear answer backed by the team’s knowledge base.
           </p>
-        </div>
-      </section>
+        </header>
 
-      <section className="card">
-        <form onSubmit={askQuestion}>
-          <label htmlFor="question">Ask CampusCare</label>
-          <textarea
-            id="question"
-            rows="4"
-            value={question}
-            onChange={(event) => setQuestion(event.target.value)}
-            placeholder="Type a campus question..."
-          />
-          <button type="submit" disabled={loading}>
-            {loading ? "Checking..." : "Ask AI"}
-          </button>
-        </form>
+        <section className="question-card">
+          <div className="section-heading">
+            <div>
+              <h2>Ask CampusCare</h2>
+              <span>Type your question and press Enter or Ask AI.</span>
+            </div>
+            {question && (
+              <button className="ghost-button" type="button" onClick={clearConversation}>
+                Clear
+              </button>
+            )}
+          </div>
 
-        <div className="suggestions">
-          {starterQuestions.map((item) => (
-            <button
-              className="suggestion"
-              key={item}
-              type="button"
-              onClick={() => setQuestion(item)}
-            >
-              {item}
-            </button>
-          ))}
-        </div>
-      </section>
+          <form onSubmit={askQuestion}>
+            <textarea
+              id="question"
+              rows="5"
+              value={question}
+              onChange={(event) => setQuestion(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" && !event.shiftKey) {
+                  event.preventDefault();
+                  askQuestion();
+                }
+              }}
+              placeholder="Example: What should I do if I lose my student ID?"
+              aria-label="Campus question"
+            />
+            <div className="form-footer">
+              <span className="hint">Shift + Enter for a new line</span>
+              <button className="primary-button" type="submit" disabled={loading || !question.trim()}>
+                {loading ? "Checking..." : "Ask AI"}
+              </button>
+            </div>
+          </form>
 
-      {error && <section className="card error">{error}</section>}
-
-      {answer && (
-        <section className="card">
-          <h2>Guidance</h2>
-          <p className="answer">{answer}</p>
-
-          <h3>Sources</h3>
-          {sources.length ? (
-            <div className="sources">
-              {sources.map((source) => (
-                <div className="source" key={source.title}>
-                  <strong>{source.title}</strong>
-                  <span>{source.source}</span>
-                </div>
+          <div className="suggestions">
+            <span className="suggestions-label">Try a sample</span>
+            <div className="suggestion-list">
+              {starterQuestions.map((item) => (
+                <button
+                  className="suggestion"
+                  key={item}
+                  type="button"
+                  onClick={() => useSuggestion(item)}
+                >
+                  {item}
+                </button>
               ))}
             </div>
+          </div>
+        </section>
+
+        {error && (
+          <section className="message-card error-card" role="alert">
+            <strong>Backend connection issue</strong>
+            <p>{error}</p>
+          </section>
+        )}
+
+        <section className="answer-card" aria-live="polite">
+          <div className="section-heading">
+            <div>
+              <h2>AI Answer</h2>
+              <span>{loading ? "Searching the CampusCare knowledge base..." : "Your response will appear here."}</span>
+            </div>
+            <span className={loading ? "status-dot loading" : "status-dot"} />
+          </div>
+
+          {loading ? (
+            <div className="loading-state">
+              <span className="spinner" />
+              <p>Finding the most relevant campus guidance...</p>
+            </div>
+          ) : answer ? (
+            <>
+              <p className="answer-text">{answer}</p>
+
+              <div className="sources-section">
+                <h3>Sources</h3>
+                {sources.length > 0 ? (
+                  <div className="source-grid">
+                    {sources.map((source, index) => (
+                      <article className="source" key={source.title || index}>
+                        <strong>{source.title || "Campus source"}</strong>
+                        <span>{source.source || "Knowledge base"}</span>
+                      </article>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="muted">The backend did not return source metadata for this answer.</p>
+                )}
+              </div>
+            </>
           ) : (
-            <p>No matching sources were returned.</p>
+            <div className="empty-state">
+              <div className="empty-icon">?</div>
+              <p>Start by asking a campus-related question.</p>
+            </div>
           )}
         </section>
-      )}
+
+        <footer className="footer-note">
+          CampusCare AI • Frontend MVP • Backend endpoint: <code>/api/chat</code>
+        </footer>
+      </section>
     </main>
   );
 }
