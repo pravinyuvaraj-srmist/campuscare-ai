@@ -8,16 +8,16 @@ This folder contains the AI pipeline for CampusCare AI.
 Student question
       |
       v
-Question embedding
+Text vectorization
       |
       v
-Semantic vector retrieval
+Relevant knowledge retrieval
       |
       v
-Top-k relevant knowledge chunks
+Grounded prompt
       |
       v
-Grounded LLM prompt
+Optional LLM
       |
       v
 Answer + source references
@@ -27,12 +27,12 @@ Answer + source references
 
 - document_loader.py — loads and validates the JSON knowledge base.
 - chunker.py — splits documents into overlapping chunks.
-- embeddings.py — creates normalized sentence embeddings.
+- embeddings.py — creates dependency-light normalized text vectors.
 - retriever.py — performs cosine-similarity vector search.
 - prompt_builder.py — constructs a grounded prompt from retrieved context.
 - llm_client.py — calls an LLM when credentials are configured.
 - rag.py — orchestrates the complete RAG flow.
-- build_index.py — writes an embeddings index for later startup optimization.
+- build_index.py — writes a portable JSON vector index.
 - config.py — central configuration.
 - requirements.txt — AI dependencies.
 
@@ -43,14 +43,10 @@ From the repository root:
 ~~~bash
 python -m venv .venv
 # Activate the environment for your operating system
-pip install -r ai/requirements.txt
+pip install -r backend/requirements.txt
 ~~~
 
-## Run tests
-
-~~~bash
-python -m pytest ai/tests -q
-~~~
+The current MVP deliberately avoids PyTorch, SciPy, NumPy, and scikit-learn so it can run on restricted Windows machines without native DLL loading problems.
 
 ## Try the RAG pipeline
 
@@ -58,7 +54,7 @@ python -m pytest ai/tests -q
 python -c "from ai.rag import build_pipeline; r=build_pipeline().answer('I lost my student ID. What should I do?'); print(r.answer); print(r.sources)"
 ~~~
 
-The first embedding run downloads the selected sentence-transformer model.
+The default retrieval vectorizer is deterministic and dependency-light. It provides a local vector-search layer for the MVP. When an LLM is configured, retrieved context is passed to the LLM for grounded natural-language generation.
 
 ## Optional LLM
 
@@ -84,8 +80,8 @@ pipeline = build_pipeline()
 result = pipeline.answer("How can I get medical assistance?")
 ~~~
 
-It receives an object containing the generated answer, source metadata, and retrieval results.
+The result contains the generated or fallback answer, source metadata, and retrieval results.
 
 ## Data note
 
-The current data/knowledge_base.json is starter sample data. Before presenting real campus guidance, replace it with verified, permitted institutional/public information and document source URLs and licensing.
+The current `data/knowledge_base.json` is starter sample data. Before presenting real campus guidance, replace it with verified, permitted institutional/public information and document source URLs and licensing.
