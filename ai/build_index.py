@@ -1,8 +1,6 @@
-"""Build a local vector index for CampusCare AI."""
+"""Build a local JSON vector index for CampusCare AI."""
 
 import json
-
-import numpy as np
 
 from .chunker import chunk_documents
 from .config import DATA_FILE, EMBEDDING_MODEL, INDEX_DIR
@@ -19,7 +17,9 @@ def main() -> None:
     embeddings = embed_texts(texts, EMBEDDING_MODEL)
 
     INDEX_DIR.mkdir(parents=True, exist_ok=True)
-    np.save(INDEX_DIR / "embeddings.npy", embeddings)
+
+    with (INDEX_DIR / "embeddings.json").open("w", encoding="utf-8") as file:
+        json.dump(embeddings, file)
 
     with (INDEX_DIR / "chunks.json").open("w", encoding="utf-8") as file:
         json.dump(
@@ -39,7 +39,7 @@ def main() -> None:
         )
 
     print(f"Created {len(chunks)} chunks.")
-    print(f"Saved embeddings to: {INDEX_DIR / 'embeddings.npy'}")
+    print(f"Saved vectors to: {INDEX_DIR / 'embeddings.json'}")
     print(f"Saved chunk metadata to: {INDEX_DIR / 'chunks.json'}")
 
 
