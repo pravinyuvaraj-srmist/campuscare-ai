@@ -8,7 +8,7 @@ CampusCare AI is an AI-powered student assistance platform designed to help stud
 Students may struggle to locate the correct campus information when they need help with services, facilities, procedures, or urgent support.
 
 ### Proposed Solution
-CampusCare AI provides a simple conversational interface. A student asks a question, the system retrieves relevant information from a curated campus knowledge base, and an AI model generates a grounded response with source references.
+CampusCare AI provides a simple conversational interface. A student asks a question, the system retrieves relevant information from a curated campus knowledge base, and returns guidance with source references. The current scaffold uses deterministic retrieval so the end-to-end MVP can run without external API credentials; semantic retrieval and an LLM layer are planned next.
 
 ## MVP Features
 
@@ -39,6 +39,27 @@ campuscare-ai/
 ├── .gitignore
 └── README.md
 ```
+
+## Run the MVP locally
+
+### Backend
+
+```bash
+python -m venv .venv
+# Activate the virtual environment for your OS
+pip install -r backend/requirements.txt
+uvicorn backend.app.main:app --reload
+```
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open the Vite URL shown in the terminal. The frontend defaults to `http://localhost:8000` for the backend.
 
 ## Current Milestone
 
