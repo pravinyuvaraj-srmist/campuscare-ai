@@ -1,0 +1,27 @@
+[
+  {
+    "title": "Lost Student ID Card",
+    "content": "Report a lost student ID card to the campus administrative office or the designated student services desk. Carry another valid form of identification if available and request a replacement through the official process.",
+    "source": "CampusCare sample knowledge base"
+  },
+  {
+    "title": "Medical Assistance",
+    "content": "For a non-emergency medical concern, contact the campus health centre or student welfare office. For urgent situations, contact the emergency services listed by your institution and seek immediate assistance from nearby staff.",
+    "source": "CampusCare sample knowledge base"
+  },
+  {
+    "title": "Hostel Support",
+    "content": "For hostel maintenance or accommodation issues, contact the hostel office or assigned warden and provide the room number and a short description of the issue.",
+    "source": "CampusCare sample knowledge base"
+  },
+  {
+    "title": "Academic Office",
+    "content": "For questions about course registration, academic records, certificates, or examination procedures, contact the appropriate academic or examination office.",
+    "source": "CampusCare sample knowledge base"
+  },
+  {
+    "title": "Campus Emergency",
+    "content": "During a campus emergency, move to a safe location, follow official campus instructions, and contact the institution's published emergency contacts or local emergency services as appropriate.",
+    "source": "CampusCare sample knowledge base"
+  }
+]
