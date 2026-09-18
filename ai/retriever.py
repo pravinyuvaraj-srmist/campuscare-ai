@@ -1,9 +1,8 @@
 from dataclasses import dataclass
-
-import numpy as np
+import math
 
 from .chunker import Chunk
-from .embeddings import embed_query
+from .embeddings import embed_query, embed_texts
 
 
 @dataclass(frozen=True)
@@ -16,7 +15,7 @@ class VectorRetriever:
     def __init__(
         self,
         chunks: list[Chunk],
-        embeddings: np.ndarray,
+        embeddings: list[tuple[float, ...]],
         model_name: str,
     ):
         if len(chunks) != len(embeddings):
@@ -28,27 +27,29 @@ class VectorRetriever:
 
     @classmethod
     def build(cls, chunks: list[Chunk], model_name: str):
-        from .embeddings import embed_texts
-
-        texts = [f"{chunk.title}\n{chunk.text}" for chunk in chunks]
+        texts = [f"{chunk.title}
+{chunk.text}" for chunk in chunks]
         embeddings = embed_texts(texts, model_name)
         return cls(chunks, embeddings, model_name)
 
     def search(self, query: str, top_k: int = 3) -> list[RetrievalResult]:
-        if not query.strip() or not self.chunks:
-            return []
-
-        if top_k <= 0:
+        if not query.strip() or not self.chunks or top_k <= 0:
             return []
 
         query_vector = embed_query(query, self.model_name)
-        scores = self.embeddings @ query_vector
-        indices = np.argsort(scores)[::-1][:top_k]
+
+        scored = []
+        for chunk, vector in zip(self.chunks, self.embeddings):
+            score = sum(a * b for a, b in zip(vector, query_vector))
+            scored.append((score, chunk))
+
+        scored.sort(key=lambda item: item[0], reverse=True)
 
         return [
             RetrievalResult(
-                chunk=self.chunks[int(index)],
-                score=float(scores[int(index)]),
+                chunk=chunk,
+                score=round(float(score), 4),
             )
-            for index in indices
+            for score, chunk in scored[:top_k]
+            if score > 0.0
         ]
