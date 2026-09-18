@@ -1,48 +1,50 @@
 # CampusCare AI
 
-CampusCare AI is an AI-powered student assistance platform designed to help students quickly find campus support, emergency information, and institutional guidance.
+CampusCare AI is an AI-assisted student support platform designed to help students quickly find campus support, emergency information, and institutional guidance.
 
 ## Open Innovation Track
 
 ### Problem
+
 Students may struggle to locate the correct campus information when they need help with services, facilities, procedures, or urgent support.
 
 ### Proposed Solution
-CampusCare AI provides a simple conversational interface. A student asks a question, the system retrieves relevant information from a curated campus knowledge base, and returns guidance with source references. The current scaffold uses deterministic retrieval so the end-to-end MVP can run without external API credentials; semantic retrieval and an LLM layer are planned next.
 
-## MVP Features
+CampusCare AI provides a simple conversational interface. A student asks a question, the system retrieves relevant information from a curated knowledge base, and returns grounded guidance with source references.
+
+### MVP Features
 
 - Student-friendly chat interface
-- Knowledge-base / document retrieval
-- AI-generated grounded answers
+- Knowledge-base retrieval
+- Retrieval-augmented AI response path
 - Source references for retrieved information
-- Basic feedback mechanism
-- Simple architecture that can be demonstrated end-to-end
+- Loading and error states
+- Simple architecture suitable for an end-to-end demo
 
-## Planned Technology
+### Technology
 
 - Frontend: React + Vite
 - Backend: Python + FastAPI
-- AI/RAG: Python, embeddings, vector search, LLM API
-- Data: Curated public/open campus-support information plus project sample data
-- Deployment: To be selected during implementation
+- AI/RAG: Python, lightweight vector retrieval, optional LLM API
+- Data: Curated/sample campus-support knowledge base
+- Deployment: To be selected
 
-## Repository Structure
+### Repository Structure
 
 ```
 campuscare-ai/
 ├── ai/                  # AI/RAG pipeline
 ├── backend/             # FastAPI backend
-├── data/                # Dataset notes and sample knowledge base
+├── data/                # Knowledge base
 ├── docs/                # Architecture and project documentation
-├── frontend/            # Web application
+├── frontend/            # React web application
 ├── .gitignore
 └── README.md
 ```
 
-## Run the MVP locally
+### Run the MVP locally
 
-### Backend
+From the repository root:
 
 ```bash
 python -m venv .venv
@@ -51,7 +53,7 @@ pip install -r backend/requirements.txt
 uvicorn backend.app.main:app --reload
 ```
 
-### Frontend
+For the frontend:
 
 ```bash
 cd frontend
@@ -59,18 +61,12 @@ npm install
 npm run dev
 ```
 
-Open the Vite URL shown in the terminal. The frontend defaults to `http://localhost:8000` for the backend.
+The frontend defaults to `http://localhost:8000` for the backend.
 
-## Current Milestone
+### Current Status
 
-Review 1 — Setup & Architecture
+The backend is connected to the RAG pipeline and returns answers with source metadata. The RAG layer uses a portable deterministic vector representation so the MVP can run on restricted Windows environments without PyTorch/SciPy. When `LLM_API_KEY` and `LLM_MODEL` are configured, the RAG layer can call the configured LLM to generate the grounded response; otherwise it falls back to the best retrieved knowledge chunk.
 
-- Project concept defined
-- Repository initialized
-- System architecture documented
-- MVP scope defined
-- Implementation scaffold prepared
+## Security
 
-## Team
-
-Hackathon team repository for the Code Cortex Open Innovation track.
+Never commit API keys or other credentials to GitHub. Use local environment variables for LLM configuration.
