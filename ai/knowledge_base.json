@@ -1,0 +1,50 @@
+[
+  {
+    "id": "id-card",
+    "title": "Lost or damaged student ID card",
+    "content": "If a student loses or damages their student ID card, they should report it to the student affairs or identity-card office and request a replacement. Students should follow the official campus replacement procedure and carry any required identification.",
+    "source": "CampusCare sample institutional guidance"
+  },
+  {
+    "id": "medical",
+    "title": "Medical assistance",
+    "content": "For non-emergency medical help, students should contact the campus medical centre or the designated student health service. For an urgent emergency, students should contact campus security and the appropriate emergency service immediately.",
+    "source": "CampusCare sample institutional guidance"
+  },
+  {
+    "id": "hostel",
+    "title": "Hostel support and maintenance",
+    "content": "For hostel issues such as room maintenance, water, electricity, or other accommodation concerns, students should contact the hostel administration or the designated hostel support desk.",
+    "source": "CampusCare sample institutional guidance"
+  },
+  {
+    "id": "academic",
+    "title": "Academic support",
+    "content": "For academic questions about courses, attendance, schedules, or academic procedures, students should contact their department office, faculty adviser, or academic coordinator.",
+    "source": "CampusCare sample institutional guidance"
+  },
+  {
+    "id": "library",
+    "title": "Library support",
+    "content": "For library questions about borrowing, returning, access, or library resources, students should contact the library help desk or library staff.",
+    "source": "CampusCare sample institutional guidance"
+  },
+  {
+    "id": "security",
+    "title": "Campus security",
+    "content": "For a campus safety concern or an incident requiring immediate campus assistance, students should contact campus security through the official campus contact channel.",
+    "source": "CampusCare sample institutional guidance"
+  },
+  {
+    "id": "events",
+    "title": "Campus events and announcements",
+    "content": "Students should use official college announcements, event notices, and the institution's official communication channels to verify event dates, venues, registration details, and changes.",
+    "source": "CampusCare sample institutional guidance"
+  },
+  {
+    "id": "fees",
+    "title": "Fees and administrative support",
+    "content": "For questions about fee payment, receipts, certificates, or other administrative processes, students should contact the institution's accounts office or administrative office and use only official payment instructions.",
+    "source": "CampusCare sample institutional guidance"
+  }
+]
