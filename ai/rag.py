@@ -68,9 +68,7 @@ class RAGPipeline:
         except RuntimeError:
             best = retrievals[0].chunk
             answer = (
-                f"{best.text}
-
-"
+                f"{best.text}\n\n"
                 f"Sources: {best.title} — {best.source}"
             )
 
