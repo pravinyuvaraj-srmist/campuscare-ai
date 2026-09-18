@@ -4,6 +4,12 @@ import json
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from dotenv import load_dotenv
+
+from app.llm import llm_enabled, generate_answer
+
+load_dotenv(Path(__file__).resolve().parents[2] / ".env")
+
 
 DATA_PATH = Path(__file__).resolve().parents[2] / "data" / "knowledge_base.json"
 
@@ -56,6 +62,12 @@ def build_answer(question: str, matches: list[dict]) -> str:
             "I could not find a reliable answer in the current knowledge base. "
             "Please contact the relevant campus office or add an approved source."
         )
+
+    if llm_enabled():
+        try:
+            return generate_answer(question, matches)
+        except Exception as error:
+            print(f"LLM call failed, using fallback: {error}")
 
     top = matches[0]
     return (

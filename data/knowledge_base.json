@@ -23,5 +23,11 @@
     "title": "Campus Emergency",
     "content": "During a campus emergency, move to a safe location, follow official campus instructions, and contact the institution's published emergency contacts or local emergency services as appropriate.",
     "source": "CampusCare sample knowledge base"
+  },
+  {
+    "title": "Course Faculty",
+    "content": "WRITE REAL INFORMATION HERE: where students can find faculty, such as the department office or the faculty directory, and who to contact.",
+    "source": "CampusCare sample knowledge base"
   }
+
 ]
