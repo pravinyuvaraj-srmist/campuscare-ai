@@ -22,3 +22,11 @@ dist/
 *.db
 .env.*
 !.env.example
+
+# Python virtual environments
+.venv/
+.venv312/
+
+# Python virtual environments
+.venv/
+.venv312/
