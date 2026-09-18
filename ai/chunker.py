@@ -14,7 +14,7 @@ class Chunk:
 
 
 def _words(text: str) -> list[str]:
-    return re.findall(r"S+", text)
+    return re.findall(r"\S+", text)
 
 
 def chunk_documents(
@@ -36,6 +36,7 @@ def chunk_documents(
 
         start = 0
         chunk_number = 0
+
         while start < len(words):
             end = min(start + chunk_size, len(words))
             text = " ".join(words[start:end]).strip()
