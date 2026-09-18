@@ -12,4 +12,5 @@ EMBEDDING_MODEL = os.getenv(
 LLM_MODEL = os.getenv("LLM_MODEL", "")
 LLM_API_KEY = os.getenv("LLM_API_KEY", "")
 TOP_K = int(os.getenv("RAG_TOP_K", "3"))
+RAG_MIN_SCORE = float(os.getenv("RAG_MIN_SCORE", "0.35"))
 MAX_CONTEXT_CHARS = int(os.getenv("RAG_MAX_CONTEXT_CHARS", "6000"))

@@ -22,14 +22,10 @@ def build_prompt(question: str, results: list[RetrievalResult]) -> tuple[str, st
 
     for rank, result in enumerate(results, start=1):
         part = (
-            f"[Source {rank}]
-"
-            f"Title: {result.chunk.title}
-"
-            f"Source: {result.chunk.source}
-"
-            f"Content: {result.chunk.text}
-"
+            f"[Source {rank}]\n"
+            f"Title: {result.chunk.title}\n"
+            f"Source: {result.chunk.source}\n"
+            f"Content: {result.chunk.text}\n"
         )
 
         remaining = MAX_CONTEXT_CHARS - used_chars
@@ -40,18 +36,11 @@ def build_prompt(question: str, results: list[RetrievalResult]) -> tuple[str, st
         context_parts.append(part)
         used_chars += len(part)
 
-    context = "
-".join(context_parts)
+    context = "\n".join(context_parts)
 
     user_prompt = (
-        f"Student question:
-{question.strip()}
-
-"
-        f"Retrieved context:
-{context}
-
-"
+        f"Student question:\n{question.strip()}\n\n"
+        f"Retrieved context:\n{context}\n\n"
         "Write a helpful answer based only on this context. "
         "End with a compact Sources section naming the sources used."
     )

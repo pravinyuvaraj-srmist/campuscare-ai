@@ -14,8 +14,7 @@ def main() -> None:
     documents = load_documents(DATA_FILE)
     chunks = chunk_documents(documents)
 
-    texts = [f"{chunk.title}
-{chunk.text}" for chunk in chunks]
+    texts = [f"{chunk.title}\n{chunk.text}" for chunk in chunks]
     embeddings = embed_texts(texts, EMBEDDING_MODEL)
 
     INDEX_DIR.mkdir(parents=True, exist_ok=True)

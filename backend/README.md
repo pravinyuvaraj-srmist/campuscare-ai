@@ -36,8 +36,23 @@ Optional LLM configuration can be provided through environment variables:
 ```text
 LLM_API_KEY=your_key
 LLM_MODEL=your_model
+LLM_TIMEOUT_SECONDS=30
 EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
 RAG_TOP_K=3
+RAG_MIN_SCORE=0.35
 ```
 
 The API does not expose the LLM key to the frontend.
+
+On Windows PowerShell, set the values for the current terminal before starting
+the API:
+
+```powershell
+$env:LLM_API_KEY="your-api-key"
+$env:LLM_MODEL="gpt-4o-mini"
+py -m uvicorn backend.app.main:app --reload
+```
+
+The embedding model is loaded once and reused. Questions that do not match the
+knowledge base strongly enough are refused instead of receiving an unrelated
+nearest-neighbor answer.

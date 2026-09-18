@@ -30,8 +30,7 @@ class VectorRetriever:
     def build(cls, chunks: list[Chunk], model_name: str):
         from .embeddings import embed_texts
 
-        texts = [f"{chunk.title}
-{chunk.text}" for chunk in chunks]
+        texts = [f"{chunk.title}\n{chunk.text}" for chunk in chunks]
         embeddings = embed_texts(texts, model_name)
         return cls(chunks, embeddings, model_name)
 
