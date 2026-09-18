@@ -14,7 +14,7 @@ class Chunk:
 
 
 def _words(text: str) -> list[str]:
-    return re.findall(r"S+", text)
+    return re.findall(r"\S+", text)
 
 
 def chunk_documents(
